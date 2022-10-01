@@ -1,0 +1,20 @@
+---
+version: '3.8'
+services:
+  backend:
+    build: ./es_backend
+    ports:
+     - 5001:5001
+  database:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5002:5002'
+    volumes: 
+      - database:/var/lib/postgresql/data
+volumes:
+  database:
+    driver: local
