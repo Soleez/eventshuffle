@@ -1,2 +1,3 @@
 es_backend/node_modules/
 es_backend/build/
+es_backend/src/.env

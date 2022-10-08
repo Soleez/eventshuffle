@@ -1,14 +1,9 @@
-import express from 'express';
-const app = express();
-app.use(express.json());
+const http = require('http')
+const app = require('./app')
+const conf = require('./utils/config')
 
-const PORT = 5001;
+const server = http.createServer(app)
 
-app.get('/ping', (_req, res) => {
-  console.log('someone pinged here');
-  res.send('pong');
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+server.listen(conf.PORT, () => {
+  console.log(`Server running on port ${conf.PORT}`);
 });
