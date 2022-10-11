@@ -1,7 +1,11 @@
 const eventsRouter = require('express').Router()
-const Events = require('../controllers/events')
+const eventController = require('../controllers/events')
 
-eventsRouter.get('/event/list', Events.getEvents)
-eventsRouter.get('/event/:id', Events.getEventResult)
+eventsRouter.get('/event/list', eventController.getEvents)
+eventsRouter.get('/event/:id', eventController.getEventById)
+eventsRouter.get('/event/:id/results', eventController.getEventById)
+eventsRouter.post('/event', eventController.postEvent)
+//eventsRouter.post('/event/:id/vote', eventController.getEventById)
+
 
 module.exports = eventsRouter
