@@ -25,12 +25,27 @@ const postEvent = async (req: Request, res: Response) => {
     body.name,
     body.dates
   )
-  if(event) {
+
+  // formatin kahta inserttiä kerralla
+  if(event.name && event.dates) {
       await db.query(Event.postEvent, [event.name], (err: DatabaseError, result: QueryResult) => {
         if (err) throw err
       })
-      const result = await db.query('SELECT lastval() as id')
-      res.status(201).send(result.rows[0])
+
+      const result = await db.query(Event.lastId)
+      const lastId = result.rows[0]
+      
+      const mapDates = (id: number, dates: Array<Date>) => {
+        return dates.map(date => [id, date])
+      }
+
+      const datesForQuery = mapDates(lastId.id, event.dates)
+      const postDates = Event.postDates(datesForQuery)
+      
+      await db.query(postDates, (err: DatabaseError, result: QueryResult) => {
+        if (err) throw err
+      })
+      res.status(201).send(lastId)
   }
 }
 
