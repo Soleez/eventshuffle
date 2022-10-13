@@ -1,6 +1,3 @@
-const format = require('pg-format');
-
-
 class EventClass {
   name: string
   dates: Array<Date>
@@ -11,45 +8,58 @@ class EventClass {
   }
 }
 
+class BasicEvent {
+  id: number
+  name: string
 
-// Get events list
-const getEvents: String = `
-  SELECT * 
-  FROM es_event
-`
-
-// Get single event
-const getEventsById: String = `
-  SELECT * 
-  FROM es_event 
-  WHERE es_event_id = $1
-`
-
-// Post single event
-const postEvent: string = `
-  INSERT INTO es_event (event_name)
-  VALUES ($1)
-  returning es_event_id
-`
-
-// Post dates for event
-const postDates: Function = (dates: Array<Array<any>>) => {
-  return format(`
-    INSERT INTO es_event_timeslot (es_event_id, timeslot)
-    VALUES %L
-  `, dates)
+  constructor(id: number, name: string) {
+    this.id = id,
+    this.name = name
+  }
 }
 
-const lastId: string = `
-  SELECT lastval() as id
-`
+class EventDetails extends BasicEvent {
+  suitableDates: Array<VoteClass>
+
+  constructor(id: number, name: string, suitableDates: Array<VoteClass>) {
+    super(id, name)
+    this.suitableDates = suitableDates
+  }
+}
+
+
+class VoteClass {
+  date: Date
+  people: Array<string>
+
+  constructor(date: Date, people: Array<string>) {
+    this.date = date
+    this.people = people
+  }
+}
+
+
+const createEvents = (rows: Array<any>) => {
+  return rows.map(row => new BasicEvent(row.id, row.name))
+}
+
+const createEventDetails = (rows: Array<any>) => {
+  const dates = rows.map(row => row.date)
+  const eventwithDetails = new EventDetails(rows[0].id, rows[0].name, dates)
+  return eventwithDetails
+}
+
+// validoi
+const createNewEvent = (name: string, dates: Array<Date> ) => { 
+  return new EventClass(
+    name,
+    dates
+  )
+}
 
 
 module.exports = {
-  EventClass,
-  getEvents,
-  getEventsById,
-  postEvent,
-  postDates,
-  lastId
+  createEvents,
+  createEventDetails,
+  createNewEvent,
 }
