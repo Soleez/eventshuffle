@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { DatabaseError, QueryResult } from "pg";
 
 const Event = require('../models/event')
+const Vote = require('../models/vote')
 const dbConfig = require('../utils/dbConfig')
 const eventQuery = require('../queries/eventQueries')
 const db = dbConfig.DB
@@ -27,9 +28,20 @@ const getEvents = async (req: Request, res: Response) => {
  */
 const getEventById = async (req: Request, res: Response) => {
   const id = parseInt(req.params.id)
-  const result = await db.query(eventQuery.getEventsById, [id])
+  const eventResult = await db.query(eventQuery.getEventsById, [id])
 
-  const allEvents = Event.createEventDetails(result.rows)
+  const votesResult = await db.query(eventQuery.getVoteByEventId, [id])
+  console.log(votesResult.rows)
+
+  // 1 date many users
+  const mapVotes = (rows: Array<any>) => {
+    //for (const i: number; )
+  }
+  const mappedVotes = mapVotes(votesResult.rows)
+
+  const votes = Vote.getVote()
+
+  const allEvents = Event.createEventDetails(eventResult.rows)
   res.status(200).send(allEvents)
 }
 
@@ -67,8 +79,45 @@ const postEvent = async (req: Request, res: Response) => {
 }
 
 
+/**
+ * 
+ * @param req 
+ * @param res 
+ */
+ const postVote = async (req: Request, res: Response) => {
+  const body = req.body
+  const id = parseInt(req.params.id)
+
+  // check that dates are ok
+  const timeslots = await db.query(eventQuery.getTimeslots, [id])
+  //console.log(timeslots.rows)
+  //console.log(body.dates)
+
+  const vote = Vote.setVote(body.name, body.dates)
+
+  // kokeile formatin kahta inserttiä kerralla
+  if(vote.name, vote.dates) {
+
+      const mapData = (id: number, name: String, dates: Array<Date>) => {
+        return dates.map(date => [id, name, date])
+      }
+      const dataForQuery = mapData(timeslots[0].id, vote.name, vote.dates)
+      const postVotes = eventQuery.postVotes(dataForQuery)
+      
+      await db.query(postVotes, (err: DatabaseError, result: QueryResult) => {
+        if (err) throw err
+      })
+
+
+      res.status(201).send(vote.name)
+  }
+}
+
+
+
 module.exports = {
   getEvents,
   getEventById,
-  postEvent
+  postEvent,
+  postVote
 }

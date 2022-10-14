@@ -1,3 +1,9 @@
+import {iVoteClass} from './vote'
+
+
+/**
+ * 
+ */
 class EventClass {
   name: string
   dates: Array<Date>
@@ -8,6 +14,14 @@ class EventClass {
   }
 }
 
+interface iEventClass {
+  name: string
+  dates: Array<Date>
+}
+
+/**
+ * 
+ */
 class BasicEvent {
   id: number
   name: string
@@ -18,37 +32,56 @@ class BasicEvent {
   }
 }
 
+interface iBasicEvent {
+  id: number
+  name: string
+}
+
+
+/**
+ * 
+ */
 class EventDetails extends BasicEvent {
-  suitableDates: Array<VoteClass>
+  dates: Array<Date>
 
-  constructor(id: number, name: string, suitableDates: Array<VoteClass>) {
+  constructor(id: number, name: string, dates: Array<Date>) {
     super(id, name)
-    this.suitableDates = suitableDates
+    this.dates = dates
   }
 }
 
-
-class VoteClass {
+interface iEventDetails extends iBasicEvent {
   date: Date
-  people: Array<string>
-
-  constructor(date: Date, people: Array<string>) {
-    this.date = date
-    this.people = people
-  }
 }
 
 
-const createEvents = (rows: Array<any>) => {
+
+/**
+ * 
+ * @param rows 
+ * @returns 
+ */
+const createEvents = (rows: Array<iBasicEvent>) => {
   return rows.map(row => new BasicEvent(row.id, row.name))
 }
 
-const createEventDetails = (rows: Array<any>) => {
+/**
+ * 
+ * @param rows 
+ * @returns 
+ */
+const createEventDetails = (rows: Array<iEventDetails>) => {
   const dates = rows.map(row => row.date)
   const eventwithDetails = new EventDetails(rows[0].id, rows[0].name, dates)
   return eventwithDetails
 }
 
+/**
+ * 
+ * @param name 
+ * @param dates 
+ * @returns 
+ */
 // validoi
 const createNewEvent = (name: string, dates: Array<Date> ) => { 
   return new EventClass(

@@ -5,7 +5,7 @@ eventsRouter.get('/event/list', eventController.getEvents)
 eventsRouter.get('/event/:id', eventController.getEventById)
 eventsRouter.get('/event/:id/results', eventController.getEventById)
 eventsRouter.post('/event', eventController.postEvent)
-//eventsRouter.post('/event/:id/vote', eventController.getEventById)
+eventsRouter.post('/event/:id/vote', eventController.postVote)
 
 
 module.exports = eventsRouter
