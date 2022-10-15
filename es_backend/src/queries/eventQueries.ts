@@ -11,12 +11,13 @@ const getEvents: String = `
 // Get single event
 const getEventsById: String = `
   SELECT 
-    e.es_event_id AS id, 
+    MIN(e.es_event_id) AS id, 
     e.event_name AS name,
     et.timeslot AS date
   FROM es_event AS e
   LEFT OUTER JOIN es_event_timeslot AS et ON e.es_event_id = et.es_event_id
   WHERE e.es_event_id = $1
+  GROUP BY name, date
 `
 
 // Post single event
@@ -26,7 +27,7 @@ const postEvent: string = `
   returning es_event_id
 `
 
-// Get single event
+// Get all timeslots
 const getTimeslots: String = `
   SELECT 
     MIN(et.es_event_timeslot_id) AS id, 
@@ -61,11 +62,50 @@ const getVoteByEventId: String = `
     et.timeslot AS date, 
     votes.user_name AS name
   FROM es_event_timeslot AS et
-  LEFT OUTER JOIN es_user_timeslot_for_event AS votes 
+  INNER JOIN es_user_timeslot_for_event AS votes 
     ON et.es_event_timeslot_id = votes.es_event_timeslot_id
   WHERE et.es_event_id = $1
   GROUP BY date, name
   ORDER BY date
+`
+
+// Get single event results
+const getVoteResultByEventId: String = `
+
+  -- reading from bottom to up makes it easier to understand
+
+  SELECT DISTINCT
+    user_name AS name,
+    et.timeslot AS date
+  FROM es_event_timeslot AS et
+  INNER JOIN es_user_timeslot_for_event AS votes 
+  ON et.es_event_timeslot_id = votes.es_event_timeslot_id
+  WHERE et.es_event_id = $1 AND et.timeslot = (
+
+    -- declare temp table to select only timeslot
+    SELECT temp_x.date FROM (
+
+      -- select timeslots that are having the count of all users
+      SELECT DISTINCT
+        COUNT(distinct user_name) as count,
+        et.timeslot AS date
+      FROM es_event_timeslot AS et
+      INNER JOIN es_user_timeslot_for_event AS votes 
+      ON et.es_event_timeslot_id = votes.es_event_timeslot_id
+      WHERE et.es_event_id = $1
+      GROUP BY date
+      HAVING COUNT(distinct user_name) = (
+
+        -- select count of different users
+        SELECT DISTINCT
+          COUNT(distinct user_name) as count
+        FROM es_event_timeslot AS et
+        INNER JOIN es_user_timeslot_for_event AS votes 
+        ON et.es_event_timeslot_id = votes.es_event_timeslot_id
+        WHERE et.es_event_id = $1
+      )
+    ) temp_x -- end temp table
+  )
 `
 
 
@@ -73,11 +113,17 @@ const lastId: string = `
   SELECT lastval() as id
 `
 
+const checkEventId: string = `
+  SELECT MAX(es_event_id) FROM es_event
+`
+
 
 module.exports = {
+  checkEventId,
   getEvents,
   getEventsById,
   getVoteByEventId,
+  getVoteResultByEventId,
   getTimeslots,
   postEvent,
   postDates,

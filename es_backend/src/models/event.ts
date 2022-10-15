@@ -43,15 +43,29 @@ interface iBasicEvent {
  */
 class EventDetails extends BasicEvent {
   dates: Array<Date>
+  votes: Array<iVoteClass>
 
-  constructor(id: number, name: string, dates: Array<Date>) {
+  constructor(id: number, name: string, dates: Array<Date>, votes: Array<iVoteClass>) {
     super(id, name)
     this.dates = dates
+    this.votes = votes
   }
 }
 
 interface iEventDetails extends iBasicEvent {
   date: Date
+}
+
+/**
+ * 
+ */
+ class EventResults extends BasicEvent {
+  suitableDates: Array<iVoteClass>
+
+  constructor(id: number, name: string, suitableDates: Array<iVoteClass>) {
+    super(id, name)
+    this.suitableDates = suitableDates
+  }
 }
 
 
@@ -70,11 +84,22 @@ const createEvents = (rows: Array<iBasicEvent>) => {
  * @param rows 
  * @returns 
  */
-const createEventDetails = (rows: Array<iEventDetails>) => {
+const createEventDetails = (rows: Array<iEventDetails>, votes: Array<iVoteClass>) => {
   const dates = rows.map(row => row.date)
-  const eventwithDetails = new EventDetails(rows[0].id, rows[0].name, dates)
+  const eventwithDetails = new EventDetails(rows[0].id, rows[0].name, dates, votes)
   return eventwithDetails
 }
+
+/**
+ * 
+ * @param rows 
+ * @returns 
+ */
+ const createEventResults = (rows: Array<iEventDetails>, votes: Array<iVoteClass>) => {
+  const eventwithDetails = new EventResults(rows[0].id, rows[0].name, votes)
+  return eventwithDetails
+}
+
 
 /**
  * 
@@ -94,5 +119,6 @@ const createNewEvent = (name: string, dates: Array<Date> ) => {
 module.exports = {
   createEvents,
   createEventDetails,
+  createEventResults,
   createNewEvent,
 }

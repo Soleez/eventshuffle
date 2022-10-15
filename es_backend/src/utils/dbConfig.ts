@@ -6,7 +6,8 @@ const DB = new dbClient.Client({
   host: "localhost",  
   database: "postgres",
   password: "postgres",
-  port: 5002
+  port: 5002,
+  timezone: 'UTC+2'
 })
 
 DB.connect()
