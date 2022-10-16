@@ -4,21 +4,17 @@ This is Eventshuffle-backend. It can be used for organizing meetings
 between multiple participants. It saves new events and lets participants
 vote suitable dates for them.
 
+App is running in:
+https://eventshuffle.fly.dev/api/v1/api-docs/
+
 # How to run this?
 
 With docker-compose go to root of the project and give command. 
-
+```
 docker-compose up
-
+```
 Servers starts in you localhost:5001 and database is running in 5002
+After the first connection you need to run create_needed_tables.sql script from ./es_database_tables.sql
+Default sql connection for localhost can be found from docker-compose.yaml
 
-
-
-You can run the backend without database:
-If you want to run the backend alone with docker you can use commands
-cd es_backend
-docker build -t es_backend .
-docker run --name es_backend_server -p 5001:5001 es_backend 
-backend runs in localhost 5005
-If you dont want to use docker you run the backendcode useing npm start.
-
+After connecting to database try [Swagger](http://localhost:5001/api/v1/api-docs/) or npm run test from in directory /es_database
