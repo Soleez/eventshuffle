@@ -4,7 +4,7 @@ const options = {
   swaggerDefinition: {
     openapi: '3.0.0',
     info: {
-      title: 'evetshuffle-api',
+      title: 'eventshuffle-api',
       version: '1.0.0'
     }
   },
@@ -14,7 +14,7 @@ const options = {
   },
 }
 
-const swaggerSpec = swaggerJSDoc(options);
+const swaggerSpec = swaggerJSDoc(options)
 
 module.exports = {
   swaggerSpec

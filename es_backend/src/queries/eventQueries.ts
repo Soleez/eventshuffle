@@ -1,4 +1,4 @@
-const format = require('pg-format');
+const format = require('pg-format')
 
 // Get events list
 const getEvents: String = `

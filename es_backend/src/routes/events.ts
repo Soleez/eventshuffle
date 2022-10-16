@@ -1,14 +1,13 @@
 const eventsRouter = require('express').Router()
 const eventController = require('../controllers/events')
 
-const swaggerUi = require('swagger-ui-express');
-const options = require('../utils/swaggerOptions')
-
-import { body } from 'express-validator';
+const swaggerUi = require('swagger-ui-express')
+const swaggerOptions = require('../utils/swaggerOptions')
+const validator = require('express-validator')
 
 
 // Initialize swagger-jsdoc -> returns validated swagger spec in json format
-eventsRouter.use('/api-docs', swaggerUi.serve, swaggerUi.setup(options.swaggerSpec));
+eventsRouter.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerOptions.swaggerSpec))
 
 /**
  * @swagger
@@ -84,8 +83,8 @@ eventsRouter.get('/event/:id/results', eventController.getEventResultById)
  *         description: Validation error
  */
 eventsRouter.post('/event', [
-  body('name').isString().notEmpty(), 
-  body('dates').isArray().notEmpty()
+  validator.body('name').isString().notEmpty(), 
+  validator.body('dates').isArray().notEmpty()
 ], eventController.postEvent)
 
 /**
@@ -120,8 +119,9 @@ eventsRouter.post('/event', [
  *         description: Validation error
  */
 eventsRouter.post('/event/:id/vote', [
-  body('name').isString().notEmpty(), 
-  body('votes').isArray().notEmpty()
+  validator.body('name').isString().notEmpty(), 
+  validator.body('votes').isArray().notEmpty()
 ], eventController.postVote)
+
 
 module.exports = eventsRouter
