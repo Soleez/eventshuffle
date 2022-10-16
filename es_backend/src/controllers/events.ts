@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
-import { DatabaseError, QueryResult } from "pg";
-import { validationResult } from 'express-validator';
+import { Request, Response } from "express"
+import { DatabaseError, QueryResult } from "pg"
+import { validationResult } from 'express-validator'
 
 
 const Event = require('../models/event')
@@ -14,12 +14,13 @@ const db = dbConfig.DB
  * @param req 
  * @param res 
  */
+
 const getEvents = async (req: Request, res: Response) => {
   await db.query(eventQuery.getEvents, (err: DatabaseError, result: QueryResult) => {
     if (err) throw err
     const allEvents = Event.createEvents(result.rows)
-  
     const resultObj = { 'events': allEvents}
+
     res.status(200).send(resultObj)
   })
 }
@@ -99,10 +100,10 @@ const getEventDetails = async (id: number) => {
  */
 const postEvent = async (req: Request, res: Response) => {
 
-  const errors = validationResult(req);
+  const errors = validationResult(req)
 
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({ errors: errors.array() })
   }
 
   const rbody = req.body
@@ -129,7 +130,7 @@ const postEvent = async (req: Request, res: Response) => {
     })
     res.status(201).send(lastId)
   }
-  else res.status(400).json({ errors: errors.array() });
+  else res.status(400).json({ errors: errors.array() })
 }
 
 
@@ -140,10 +141,10 @@ const postEvent = async (req: Request, res: Response) => {
  */
 const postVote = async (req: Request, res: Response) => {
 
-  const errors = validationResult(req);
+  const errors = validationResult(req)
 
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({ errors: errors.array() })
   }
 
   const rbody = req.body
@@ -180,6 +181,7 @@ const postVote = async (req: Request, res: Response) => {
     }
   }
 }
+
 
 module.exports = {
   getEvents,

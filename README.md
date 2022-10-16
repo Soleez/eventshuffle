@@ -1,5 +1,9 @@
 # What is this?
 
+This is Eventshuffle-backend. It can be used for organizing meetings 
+between multiple participants. It saves new events and lets participants
+vote suitable dates for them.
+
 # How to run this?
 
 With docker-compose go to root of the project and give command. 
