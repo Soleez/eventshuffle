@@ -181,14 +181,6 @@ const postVote = async (req: Request, res: Response) => {
   }
 }
 
-/**
- * Swagger
- * Testit
- * Lokitus
- * Fly.io
- * Autentikointi
- */
-
 module.exports = {
   getEvents,
   getEventById,
