@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const eventsRouter = require('express').Router()
 const eventController = require('../controllers/events')
 
-const swaggerUi = require('swagger-ui-express')
+import swaggerUi = require('swagger-ui-express')
 const swaggerOptions = require('../utils/swaggerOptions')
-const validator = require('express-validator')
+import validator = require('express-validator')
 
 
 // Initialize swagger-jsdoc -> returns validated swagger spec in json format
@@ -124,4 +125,4 @@ eventsRouter.post('/event/:id/vote', [
 ], eventController.postVote)
 
 
-module.exports = eventsRouter
+export default eventsRouter

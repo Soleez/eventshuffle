@@ -1,7 +1,7 @@
-const format = require('pg-format')
+import format = require('pg-format')
 
 // Get events list
-const getEvents: String = `
+const getEvents = `
   SELECT 
     es_event_id AS id, 
     event_name AS name
@@ -9,7 +9,7 @@ const getEvents: String = `
 `
 
 // Get single event
-const getEventsById: String = `
+const getEventsById = `
   SELECT 
     MIN(e.es_event_id) AS id, 
     e.event_name AS name,
@@ -21,14 +21,14 @@ const getEventsById: String = `
 `
 
 // Post single event
-const postEvent: string = `
+const postEvent = `
   INSERT INTO es_event (event_name)
   VALUES ($1)
   returning es_event_id
 `
 
 // Get all timeslots
-const getTimeslots: String = `
+const getTimeslots = `
   SELECT 
     MIN(et.es_event_timeslot_id) AS id, 
     et.timeslot AS date
@@ -38,7 +38,7 @@ const getTimeslots: String = `
 `
 
 // Post dates for event
-const postDates: Function = (dates: Array<Array<any>>) => {
+const postDates = (dates: Array<Array<any>>) => {
   return format(`
     INSERT INTO es_event_timeslot (es_event_id, timeslot)
     VALUES %L
@@ -47,7 +47,7 @@ const postDates: Function = (dates: Array<Array<any>>) => {
 
 
 // Post dates for event
-const postVotes: Function = (data: Array<Array<any>>) => {
+const postVotes = (data: Array<Array<any>>) => {
   return format(`
     INSERT INTO es_user_timeslot_for_event (es_event_timeslot_id, user_name, timeslot)
     VALUES %L
@@ -57,7 +57,7 @@ const postVotes: Function = (data: Array<Array<any>>) => {
 
 
 // Get single event
-const getVoteByEventId: String = `
+const getVoteByEventId = `
   SELECT 
     et.timeslot AS date, 
     votes.user_name AS name
@@ -70,7 +70,7 @@ const getVoteByEventId: String = `
 `
 
 // Get single event results
-const getVoteResultByEventId: String = `
+const getVoteResultByEventId = `
 
   -- reading from bottom to up makes it easier to understand
 
@@ -80,7 +80,7 @@ const getVoteResultByEventId: String = `
   FROM es_event_timeslot AS et
   INNER JOIN es_user_timeslot_for_event AS votes 
   ON et.es_event_timeslot_id = votes.es_event_timeslot_id
-  WHERE et.es_event_id = $1 AND et.timeslot = (
+  WHERE et.es_event_id = $1 AND et.timeslot IN (
 
     -- declare temp table to select only timeslot
     SELECT temp_x.date FROM (
@@ -109,11 +109,11 @@ const getVoteResultByEventId: String = `
 `
 
 
-const lastId: string = `
+const lastId = `
   SELECT lastval() as id
 `
 
-const checkEventId: string = `
+const checkEventId = `
   SELECT MAX(es_event_id) FROM es_event
 `
 

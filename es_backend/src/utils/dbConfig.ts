@@ -1,8 +1,8 @@
-require('dotenv').config()
-const dbClient = require('pg')
-import { DatabaseError } from "pg"
+import dotenv = require('dotenv')
+dotenv.config()
+import pg = require('pg')
 
-const DB = new dbClient.Client({
+const DB = new pg.Client({
   user: "postgres",
   host: "localhost",  
   database: "postgres",
@@ -11,14 +11,11 @@ const DB = new dbClient.Client({
 })
 
 
-DB.connect((err: DatabaseError) => {
+DB.connect((err: Error) => {
   if(err) {
     console.error('connection error', err.stack)
   }
 })
 
 
-
-module.exports = {
-  DB
-}
+export default DB

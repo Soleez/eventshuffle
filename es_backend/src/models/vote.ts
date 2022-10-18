@@ -1,15 +1,15 @@
 
 export interface iVoteClass {
   date: Date
-  people: Array<String>
+  people: Array<string>
 }
 
 
 class VoteClass {
   date: Date
-  people: Array<String>
+  people: Array<string>
 
-  constructor(date: Date, people: Array<String>) {
+  constructor(date: Date, people: Array<string>) {
     this.date = date
     this.people = people
   }
@@ -22,15 +22,15 @@ export interface iTimeslot {
 }
 
 export interface iVoteInsert {
-  name: String
+  name: string
   votes: Array<Date>
 }
 
 class VoteInsert {
-  name: String
+  name: string
   dates: Array<Date>
 
-  constructor(name: String, dates: Array<Date>) {
+  constructor(name: string, dates: Array<Date>) {
     this.name = name
     this.dates = dates
   }
@@ -40,7 +40,7 @@ class VoteInsert {
 
 
 // validoi
-const getVote = (date: Date, people: Array<String>) => { 
+const getVote = (date: Date, people: Array<string>) => { 
   return new VoteClass(
     date,
     people
@@ -48,7 +48,7 @@ const getVote = (date: Date, people: Array<String>) => {
 }
 
 // validoi
-const setVote = (name: String, dates: Array<Date> ) => { 
+const setVote = (name: string, dates: Array<Date> ) => { 
   return new VoteInsert(
     name,
     dates
