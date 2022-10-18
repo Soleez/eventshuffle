@@ -1,9 +1,10 @@
 import http = require('http')
-import serverApp from './app';
+import app from './app';
 import port = require('./utils/serverConfig')
 
-const server = http.createServer(serverApp)
+const server = http.createServer(app)
 
 server.listen(port.default, () => {
   console.log(`Server running on port ${port.default}`)
 });
+

@@ -1,4 +1,5 @@
 import format = require('pg-format')
+import { iTimeslot, iVoteInsert } from '../models/vote'
 
 // Get events list
 const getEvents = `
@@ -38,7 +39,7 @@ const getTimeslots = `
 `
 
 // Post dates for event
-const postDates = (dates: Array<Array<any>>) => {
+const postDates = (dates: Array<Array<iTimeslot>>) => {
   return format(`
     INSERT INTO es_event_timeslot (es_event_id, timeslot)
     VALUES %L
@@ -47,7 +48,7 @@ const postDates = (dates: Array<Array<any>>) => {
 
 
 // Post dates for event
-const postVotes = (data: Array<Array<any>>) => {
+const postVotes = (data: Array<iVoteInsert>) => {
   return format(`
     INSERT INTO es_user_timeslot_for_event (es_event_timeslot_id, user_name, timeslot)
     VALUES %L

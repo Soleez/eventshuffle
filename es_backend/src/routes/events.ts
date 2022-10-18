@@ -3,12 +3,12 @@ const eventsRouter = require('express').Router()
 const eventController = require('../controllers/events')
 
 import swaggerUi = require('swagger-ui-express')
-const swaggerOptions = require('../utils/swaggerOptions')
+import swaggerOptions = require('../utils/swaggerOptions')
 import validator = require('express-validator')
 
 
 // Initialize swagger-jsdoc -> returns validated swagger spec in json format
-eventsRouter.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerOptions.swaggerSpec))
+eventsRouter.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerOptions.default))
 
 /**
  * @swagger

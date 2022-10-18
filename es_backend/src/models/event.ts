@@ -1,9 +1,19 @@
 import {iVoteClass} from './vote'
 
+export interface iEventClass {
+  name: string
+  dates: Array<Date>
+}
 
-/**
- * 
- */
+export interface iBasicEvent {
+  id: number
+  name: string
+}
+
+export interface iEventDetails extends iBasicEvent {
+  date: Date
+}
+
 class EventClass {
   name: string
   dates: Array<Date>
@@ -14,14 +24,6 @@ class EventClass {
   }
 }
 
-interface iEventClass {
-  name: string
-  dates: Array<Date>
-}
-
-/**
- * 
- */
 class BasicEvent {
   id: number
   name: string
@@ -32,15 +34,6 @@ class BasicEvent {
   }
 }
 
-interface iBasicEvent {
-  id: number
-  name: string
-}
-
-
-/**
- * 
- */
 class EventDetails extends BasicEvent {
   dates: Array<Date>
   votes: Array<iVoteClass>
@@ -52,14 +45,9 @@ class EventDetails extends BasicEvent {
   }
 }
 
-interface iEventDetails extends iBasicEvent {
-  date: Date
-}
 
-/**
- * 
- */
- class EventResults extends BasicEvent {
+
+class EventResults extends BasicEvent {
   suitableDates: Array<iVoteClass>
 
   constructor(id: number, name: string, suitableDates: Array<iVoteClass>) {
@@ -107,7 +95,6 @@ const createEventDetails = (rows: Array<iEventDetails>, votes: Array<iVoteClass>
  * @param dates 
  * @returns 
  */
-// validoi
 const createNewEvent = (name: string, dates: Array<Date> ) => { 
   return new EventClass(
     name,

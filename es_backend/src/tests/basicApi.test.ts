@@ -2,7 +2,7 @@
 import supertest = require('supertest')
 import apiTest = require('../app')
 
-const api = supertest(apiTest)
+const api = supertest(apiTest.default)
 
 
 const newEvent = {

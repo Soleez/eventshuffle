@@ -2,7 +2,9 @@
 import { Request, Response } from "express"
 import { QueryResult } from "pg"
 import { validationResult } from 'express-validator'
+import { iVoteInsert } from "../models/vote"
 import DB = require('../utils/dbConfig')
+
 
 const Event = require('../models/event')
 const Vote = require('../models/vote')
@@ -60,7 +62,7 @@ const getEventById = async (req: Request, res: Response) => {
 const getEventDetails = async (id: number) => {
   const eventResult = await db.query(eventQuery.getEventsById, [id])
   const votesResult = await db.query(eventQuery.getVoteByEventId, [id])
-  
+
   const reducedVotes = Vote.reduceVotes(eventResult.rows, votesResult.rows)
 
   const eventDetails = Event.createEventDetails(eventResult.rows, reducedVotes)
@@ -77,15 +79,13 @@ const getEventDetails = async (id: number) => {
   const id = parseInt(req.params.id)
 
   const idCheck = await eventIdCheck(id)
-  console.log(idCheck)
   if(idCheck?.error) {
     res.status(404).json(idCheck)
   }
   else {
     const eventResult = await db.query(eventQuery.getEventsById, [id])
-    console.log(eventResult)
     const votesResult = await db.query(eventQuery.getVoteResultByEventId, [id])
-    console.log(votesResult)
+
     const reducedVotes = Vote.reduceVotes(eventResult.rows, votesResult.rows)
     
     const eventDetails = Event.createEventResults(eventResult.rows, reducedVotes)
@@ -112,7 +112,7 @@ const postEvent = async (req: Request, res: Response) => {
   const event = Event.createNewEvent(rbody.name, rbody.dates)
 
   if(event.name && event.dates) {
-    await db.query(eventQuery.postEvent, [event.name], (err: Error) => {
+    db.query(eventQuery.postEvent, [event.name], (err: Error) => {
       if (err) throw err
     })
 
@@ -126,7 +126,7 @@ const postEvent = async (req: Request, res: Response) => {
     const datesForQuery = mapDates(lastId.id, event.dates)
     const postDates = eventQuery.postDates(datesForQuery)
     
-    await db.query(postDates, (err: Error) => {
+    db.query(postDates, (err: Error) => {
       if (err) throw err
     })
     res.status(201).send(lastId)
@@ -161,7 +161,7 @@ const postVote = async (req: Request, res: Response) => {
     const timeslotsResult = await db.query(eventQuery.getTimeslots, [id])
     const timeslots = timeslotsResult.rows
   
-    const mappedData: Array<any> = Vote.mapTimeslotId(timeslots, rbody)
+    const mappedData: Array<iVoteInsert> = Vote.mapTimeslotId(timeslots, rbody)
   
     // send response if data is not valid
     const findErrors = mappedData.find(row => !Array.isArray(row))
@@ -171,7 +171,7 @@ const postVote = async (req: Request, res: Response) => {
     else {
       // post values
       const postVotes = eventQuery.postVotes(mappedData)
-      await db.query(postVotes, (err: Error) => {
+      db.query(postVotes, (err: Error) => {
         if (err) throw err
       })
   

@@ -1,9 +1,24 @@
+import {iEventDetails} from './event'
 
 export interface iVoteClass {
   date: Date
   people: Array<string>
 }
 
+export interface iTimeslot {
+  id: number
+  date: Date
+}
+
+export interface iVoteObj {
+  name: string
+  date: Date
+}
+
+export interface iVoteInsert {
+  name: string
+  votes: Array<Date>
+}
 
 class VoteClass {
   date: Date
@@ -15,16 +30,6 @@ class VoteClass {
   }
 }
 
-
-export interface iTimeslot {
-  id: number
-  date: Date
-}
-
-export interface iVoteInsert {
-  name: string
-  votes: Array<Date>
-}
 
 class VoteInsert {
   name: string
@@ -39,7 +44,6 @@ class VoteInsert {
 
 
 
-// validoi
 const getVote = (date: Date, people: Array<string>) => { 
   return new VoteClass(
     date,
@@ -47,7 +51,7 @@ const getVote = (date: Date, people: Array<string>) => {
   )
 }
 
-// validoi
+
 const setVote = (name: string, dates: Array<Date> ) => { 
   return new VoteInsert(
     name,
@@ -65,8 +69,9 @@ const mapTimeslotId = (timeslots: Array<iTimeslot>, data: iVoteInsert) => {
 }
 
 
-const reduceVotes = (eventRows: Array<any>, voteRows: Array<any>) => {
-  return eventRows.reduce((result, currentVal) => {
+const reduceVotes = (eventRows: Array<iEventDetails>, voteRows: Array<iVoteObj>) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return eventRows.reduce((result: any, currentVal: iEventDetails) => {
     if(voteRows === undefined) {
       return result
     }
@@ -74,7 +79,7 @@ const reduceVotes = (eventRows: Array<any>, voteRows: Array<any>) => {
     
     if(votes.length > 0) {
       const voters = votes.map(vote => vote.name)
-      const returnedObj = getVote(currentVal.date, voters)
+      const returnedObj: VoteClass = getVote(currentVal.date, voters)
       return result.concat(returnedObj)
     }
     else return result
@@ -83,7 +88,7 @@ const reduceVotes = (eventRows: Array<any>, voteRows: Array<any>) => {
 
 
 
-module.exports = {
+module.exports = { 
   getVote,
   setVote,
   mapTimeslotId,
