@@ -80,7 +80,7 @@ const getVoteResultByEventId: String = `
   FROM es_event_timeslot AS et
   INNER JOIN es_user_timeslot_for_event AS votes 
   ON et.es_event_timeslot_id = votes.es_event_timeslot_id
-  WHERE et.es_event_id = $1 AND et.timeslot = (
+  WHERE et.es_event_id = $1 AND et.timeslot IN (
 
     -- declare temp table to select only timeslot
     SELECT temp_x.date FROM (
