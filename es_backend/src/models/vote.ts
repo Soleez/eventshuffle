@@ -1,36 +1,41 @@
+import {iEventDetails} from './event'
 
 export interface iVoteClass {
   date: Date
-  people: Array<String>
+  people: Array<string>
 }
-
-
-class VoteClass {
-  date: Date
-  people: Array<String>
-
-  constructor(date: Date, people: Array<String>) {
-    this.date = date
-    this.people = people
-  }
-}
-
 
 export interface iTimeslot {
   id: number
   date: Date
 }
 
+export interface iVoteObj {
+  name: string
+  date: Date
+}
+
 export interface iVoteInsert {
-  name: String
+  name: string
   votes: Array<Date>
 }
 
+class VoteClass {
+  date: Date
+  people: Array<string>
+
+  constructor(date: Date, people: Array<string>) {
+    this.date = date
+    this.people = people
+  }
+}
+
+
 class VoteInsert {
-  name: String
+  name: string
   dates: Array<Date>
 
-  constructor(name: String, dates: Array<Date>) {
+  constructor(name: string, dates: Array<Date>) {
     this.name = name
     this.dates = dates
   }
@@ -39,16 +44,15 @@ class VoteInsert {
 
 
 
-// validoi
-const getVote = (date: Date, people: Array<String>) => { 
+const getVote = (date: Date, people: Array<string>) => { 
   return new VoteClass(
     date,
     people
   )
 }
 
-// validoi
-const setVote = (name: String, dates: Array<Date> ) => { 
+
+const setVote = (name: string, dates: Array<Date> ) => { 
   return new VoteInsert(
     name,
     dates
@@ -65,8 +69,9 @@ const mapTimeslotId = (timeslots: Array<iTimeslot>, data: iVoteInsert) => {
 }
 
 
-const reduceVotes = (eventRows: Array<any>, voteRows: Array<any>) => {
-  return eventRows.reduce((result, currentVal) => {
+const reduceVotes = (eventRows: Array<iEventDetails>, voteRows: Array<iVoteObj>) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return eventRows.reduce((result: any, currentVal: iEventDetails) => {
     if(voteRows === undefined) {
       return result
     }
@@ -74,7 +79,7 @@ const reduceVotes = (eventRows: Array<any>, voteRows: Array<any>) => {
     
     if(votes.length > 0) {
       const voters = votes.map(vote => vote.name)
-      const returnedObj = getVote(currentVal.date, voters)
+      const returnedObj: VoteClass = getVote(currentVal.date, voters)
       return result.concat(returnedObj)
     }
     else return result
@@ -83,7 +88,7 @@ const reduceVotes = (eventRows: Array<any>, voteRows: Array<any>) => {
 
 
 
-module.exports = {
+module.exports = { 
   getVote,
   setVote,
   mapTimeslotId,

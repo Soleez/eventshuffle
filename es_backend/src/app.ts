@@ -1,14 +1,15 @@
-const express = require('express')
+import express = require('express')
 require('express-async-errors')
 const app = express()
-const cors = require('cors')
-const events = require('./routes/events')
-const logger = require('morgan')
+import cors = require('cors')
+import logger = require('morgan')
+import events = require('./routes/events')
+
 
 app.use(cors())
 app.use(express.json())
 app.use(logger('combined'))
 
-app.use('/api/v1/', events)
+app.use('/api/v1/', events.default)
 
-module.exports = app
+export default app
