@@ -11,7 +11,7 @@
     "tsc": "tsc",
     "lint": "eslint --ext .ts ."
   },
-  "author": "Jani Mäkelä",
+  "author": "Jani Mäenhelmi",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
