@@ -1,6 +1,6 @@
 # What is this?
 
-App is done 2023 to learn Node.js backend development and TypeScript.
+App is done 2022 to learn Node.js backend development and TypeScript.
 
 This is Eventshuffle-backend. It can be used for organizing meetings 
 between multiple participants. It saves new events and lets participants
